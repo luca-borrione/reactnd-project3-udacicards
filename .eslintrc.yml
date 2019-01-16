@@ -3,11 +3,11 @@ parser: babel-eslint
 
 extends:
   - airbnb
-  # - flowtype-essential
-  # - plugin:flowtype/recommended
+  - flowtype-essential
+  - plugin:flowtype/recommended
 
-# plugins:
-#   - flowtype
+plugins:
+  - flowtype
 
 env:
   browser: true
@@ -16,9 +16,9 @@ env:
 globals:
   SyntheticEvent: true
 
-# settings:
-#   flowtype:
-#       onlyFilesWithFlowAnnotation: true
+settings:
+  flowtype:
+      onlyFilesWithFlowAnnotation: true
 
 rules:
   # no-unused-expressions: off
