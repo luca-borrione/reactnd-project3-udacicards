@@ -1,17 +1,22 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "$(npm bin)/flow; expo start",
+    "android": "$(npm bin)/flow; expo start --android",
+    "ios": "$(npm bin)/flow; expo start --ios",
     "eject": "expo eject",
     "flow": "$(npm bin)/flow",
     "postinstall": "$(npm bin)/flow-typed install"
   },
   "dependencies": {
     "expo": "32.0.0",
+    "immutable": "4.0.0-rc.12",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-redux": "6.0.0",
+    "redux": "^4.0.1",
+    "redux-immutable": "4.0.0",
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
     "babel-eslint": "10.0.1",

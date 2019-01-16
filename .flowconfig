@@ -1,7 +1,6 @@
 [ignore]
 .*/\.history/.*
 .*/\.idea/.*
-.*/build/.*
 .*/flow-typed/.*
 
 [include]
