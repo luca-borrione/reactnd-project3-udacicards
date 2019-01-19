@@ -6,7 +6,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 .history/
-package-lock.json
 .idea
 .vscode
 flow-typed/
