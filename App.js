@@ -7,6 +7,7 @@ import reducer from './reducers';
 import middleware from './middlewares';
 import { purple } from './utils/colors';
 import UdaciStatusBar from './components/UdaciStatusBar';
+import Navigation from './components/Navigation';
 
 // const store: Store<StateMap, StoreAction> = createStore(reducer, middleware);
 const store: Store<any, any> = createStore(reducer, middleware);
@@ -27,7 +28,7 @@ class App extends Component<any, any> {
       <Provider store={store}>
         <View style={styles.app}>
           <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-          <Text>APP</Text>
+          <Navigation />
         </View>
       </Provider>
     );
