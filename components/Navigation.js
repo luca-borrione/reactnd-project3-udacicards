@@ -1,11 +1,20 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
+import { purple } from '../utils/colors';
 
-const MainNav = createStackNavigator({
-  Home: HomeScreen,
+const Navigation = createStackNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      // header: null,
+      headerStyle: {
+        backgroundColor: purple,
+      },
+    },
+  },
 },
 {
   initialRouteName: 'Home',
 });
 
-export default createAppContainer(MainNav);
+export default createAppContainer(Navigation);
