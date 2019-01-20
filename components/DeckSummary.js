@@ -11,7 +11,9 @@ import { purple, white } from '../utils/colors';
 
 const styles = StyleSheet.create({
   deckCard: {
-    backgroundColor: purple,
+    backgroundColor: white,
+    borderWidth: 2,
+    borderColor: purple,
     borderRadius: Platform.OS === 'ios' ? 10 : 2,
     height: 90,
     marginLeft: 40,
@@ -19,14 +21,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: 'center',
   },
+  lastDeckCard: {
+    marginBottom: 20,
+  },
   cardTitle: {
-    color: white,
+    color: purple,
     fontSize: 24,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   cardSubTitle: {
-    color: white,
+    color: purple,
     fontSize: 14,
     textAlign: 'center',
   },
@@ -34,17 +39,21 @@ const styles = StyleSheet.create({
 
 type Props = {
   title: string,
-  numOfCards: number
+  numOfCards: number,
+  onPress: () => void,
+  lastChild: boolean,
 };
 
-const DeckCard = ({
+const DeckSummary = ({
   title,
   numOfCards,
+  onPress,
+  lastChild,
 }: Props): Element<typeof View> => (
   <View>
     <TouchableOpacity
-      style={styles.deckCard}
-      onPress={() => alert()}
+      style={[styles.deckCard, lastChild ? styles.lastDeckCard : {}]}
+      onPress={onPress}
     >
       <Text style={styles.cardTitle}>{title}</Text>
       <Text style={styles.cardSubTitle}>{numOfCards} Cards</Text>
@@ -52,4 +61,4 @@ const DeckCard = ({
   </View>
 );
 
-export default DeckCard;
+export default DeckSummary;

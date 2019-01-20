@@ -1,20 +1,26 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
-import { purple } from '../utils/colors';
+import DeckView from './DeckView';
+import { purple, white, palePurple } from '../utils/colors';
 
 const Navigation = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      // header: null,
-      headerStyle: {
-        backgroundColor: purple,
-      },
-    },
-  },
+  HomeScreen,
+  DeckView,
 },
 {
-  initialRouteName: 'Home',
+  initialRouteName: 'HomeScreen',
+  defaultNavigationOptions: {
+    headerTintColor: white,
+    headerStyle: {
+      backgroundColor: purple,
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  },
+  cardStyle: {
+    backgroundColor: palePurple,
+  },
 });
 
 export default createAppContainer(Navigation);

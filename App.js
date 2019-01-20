@@ -15,7 +15,8 @@ const store: Store<any, any> = createStore(reducer, middleware);
 const styles = StyleSheet.create({
   app: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fffaaa',
+    // backgroundColor: 'red',
     // alignItems: 'center',
     // justifyContent: 'center',
   },

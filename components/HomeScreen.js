@@ -7,7 +7,7 @@ import {
 } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { Ionicons, MaterialCommunityIcons, type Icon } from '@expo/vector-icons';
-import { purple, white } from '../utils/colors';
+import { purple, white, palePurple } from '../utils/colors';
 import DecksList from './DecksList';
 import AddDeck from './AddDeck';
 
@@ -42,7 +42,7 @@ const RouteConfigs = {
       tabBarIcon: addDeckIcon,
     },
   },
-}
+};
 
 const HomeScreen = Platform.OS === 'ios'
   ? createBottomTabNavigator(RouteConfigs, {
@@ -53,7 +53,7 @@ const HomeScreen = Platform.OS === 'ios'
         fontSize: 12,
       },
       style: {
-        backgroundColor: white,
+        backgroundColor: palePurple,
       },
     },
   })
