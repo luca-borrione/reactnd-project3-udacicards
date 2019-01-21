@@ -12,8 +12,6 @@ import { purple, white } from '../utils/colors';
 const styles: Styles = StyleSheet.create({
   baseTouch: {
     height: 70,
-    marginLeft: 40,
-    marginRight: 40,
     marginTop: 20,
     justifyContent: 'center',
   },
@@ -38,7 +36,7 @@ type Props = {
   button?: boolean,
   color?: string,
   disabled?: boolean,
-  onPress: () => void,
+  onPress: () => void | Promise<void>,
   text: string,
 };
 

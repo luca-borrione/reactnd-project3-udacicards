@@ -9,7 +9,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import { Ionicons, MaterialCommunityIcons, type Icon } from '@expo/vector-icons';
 import { purple, white, palePurple } from '../utils/colors';
 import DecksList from './DecksList';
-import AddDeck from './AddDeck';
+import AddDeck from '../containers/AddDeck';
 
 type iconProps = {
   tintColor: string

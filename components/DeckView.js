@@ -2,40 +2,36 @@
 import React, { type Element } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import BaseTouch from './BaseTouch';
-import { gray, purple, white, lightBordeaux } from '../utils/colors';
+import {
+  purple,
+  white,
+  lightBordeaux,
+} from '../utils/colors';
+import commonStyles from '../utils/styles';
 
 const styles = StyleSheet.create({
   deckView: {
     flex: 1,
-    justifyContent: 'flex-start',
   },
   block1: {
     alignItems: 'center',
+    justifyContent: 'flex-start',
     marginTop: 100,
+    flex: 1,
   },
   block2: {
-    marginTop: 100,
-  },
-  h1: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    paddingBottom: 10,
-  },
-  h3: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    paddingBottom: 30,
-  },
-  secondaryText: {
-    color: gray,
+    justifyContent: 'flex-end',
+    marginRight: 40,
+    marginLeft: 40,
+    flex: 1,
   },
 });
 
 const DeckView = (): Element<typeof View> => (
   <View style={styles.deckView}>
     <View style={styles.block1}>
-      <Text style={styles.h1}>TITLE</Text>
-      <Text style={[styles.h3, styles.secondaryText]}>10 cards</Text>
+      <Text style={commonStyles.h1}>TITLE</Text>
+      <Text style={[commonStyles.h3, commonStyles.secondaryText]}>10 cards</Text>
     </View>
     <View style={styles.block2}>
       <BaseTouch
