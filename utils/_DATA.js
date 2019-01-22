@@ -33,6 +33,16 @@ export function _saveDeck(unformattedDeck: UnformattedDeck): Promise<Deck> {
   })).then(() => (deck));
 }
 
+export function _dropDeck(deckId: string): Promise<void> {
+  return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+    .then(async (results) => {
+      const data = JSON.parse(results);
+      data[deckId] = undefined;
+      delete data[deckId];
+      await AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
+    });
+}
+
 export function clear() {
   return AsyncStorage.clear();
 }

@@ -30,8 +30,11 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  deck: Deck,
+  busy: boolean,
+  deck: Deck | void,
   navigation: NavigationScreenProp<NavigationState>,
+  setReadyState: () => void,
+  unsetDeck: (deckId: string) => Promise<void>,
 };
 
 class DeckView extends Component<Props> {
@@ -48,13 +51,34 @@ class DeckView extends Component<Props> {
 
   componentDidMount() {
     const { deck, navigation } = this.props;
-    navigation.setParams({
-      deckTitle: deck.title,
-    });
+    if (deck) {
+      navigation.setParams({
+        deckTitle: deck.title,
+      });
+    }
   }
 
+  handleDeleteDeck = async () => {
+    const {
+      deck,
+      navigation,
+      unsetDeck,
+      setReadyState,
+    } = this.props;
+    if (deck) {
+      await unsetDeck(deck.id);
+      navigation.navigate('DecksList');
+      setReadyState();
+    }
+  };
+
   render() {
-    const { deck } = this.props;
+    const { busy, deck } = this.props;
+
+    if (!deck) {
+      return null;
+    }
+
     const numOfCards: number = deck.cards.length;
     return (
       <View style={styles.deckView}>
@@ -67,20 +91,22 @@ class DeckView extends Component<Props> {
             button
             text="Add Card"
             onPress={() => alert('add a card')}
+            disabled={busy}
           />
           <BaseTouch
             button
             text="Start Quiz"
             onPress={() => alert('start quiz')}
-            disabled={numOfCards === 0}
+            disabled={numOfCards === 0 || busy}
             backgroundColor={purple}
             color={white}
             borderColor={white}
           />
           <BaseTouch
             text="Delete Deck"
-            onPress={() => alert('delete deck')}
+            onPress={this.handleDeleteDeck}
             color={lightBordeaux}
+            disabled={busy}
           />
         </View>
       </View>

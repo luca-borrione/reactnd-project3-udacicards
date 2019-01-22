@@ -37,6 +37,7 @@ export function expectMap(map: any): TMap<any, any> {
   if (map && isMap(map)) {
     return map;
   }
+  debugger;
   throw new TypeError(`unexpected type: ${typeof map} - expected map`);
 }
 

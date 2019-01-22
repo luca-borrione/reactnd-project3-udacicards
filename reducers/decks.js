@@ -1,11 +1,11 @@
 // @flow
 /* eslint-disable prefer-destructuring */
-
 import { fromJS, Map } from 'immutable';
 import {
   type DecksAction,
   ADD_DECK, type AddDeckPayload,
   INIT_DECKS, type InitDecksPayload,
+  REMOVE_DECK, type RemoveDeckPayload,
 } from '../actions/decks';
 import {
   type DeckMap,
@@ -32,6 +32,16 @@ const reducer = (state: DecksMap = new Map(), action: DecksAction) => {
         const decksMap: DecksMap = ((fromJS(decks): any): DecksMap);
         // $FlowSuppressError: The following line is borked because of https://github.com/facebook/flow/issues/7309
         return state.merge(decksMap);
+      }
+      throw new Error('unexpected empty payload');
+    }
+
+    case REMOVE_DECK: {
+      const payload: RemoveDeckPayload | void = action.payload;
+      if (payload) {
+        const { deckId } = payload;
+        // $FlowSuppressError: The following line is borked because of https://github.com/facebook/flow/issues/7309
+        return state.delete(deckId);
       }
       throw new Error('unexpected empty payload');
     }

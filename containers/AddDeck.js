@@ -12,15 +12,15 @@ import {
   type Deck,
 } from '../utils/types';
 
-type Action =
-  | Thunk<SetDeckAction>
-  | SetReadyStateAction
-
 const mapStateToProps = (state: StateMap): {
   busy: boolean,
 } => ({
   busy: getStatus(state) === BUSY_STATE,
 });
+
+type Action =
+  | Thunk<SetDeckAction>
+  | SetReadyStateAction
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   setDeck: (title: string): Promise<Deck> => (
