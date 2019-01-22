@@ -1,5 +1,6 @@
 // @flow
-import React, { type Element } from 'react';
+import React, { Component, type Element } from 'react';
+import { type NavigationState, type NavigationScreenProp } from 'react-navigation';
 import { Text, View, StyleSheet } from 'react-native';
 import BaseTouch from './BaseTouch';
 import {
@@ -8,6 +9,7 @@ import {
   lightBordeaux,
 } from '../utils/colors';
 import commonStyles from '../utils/styles';
+import { type Deck } from '../utils/types';
 
 const styles = StyleSheet.create({
   deckView: {
@@ -27,39 +29,63 @@ const styles = StyleSheet.create({
   },
 });
 
-const DeckView = (): Element<typeof View> => (
-  <View style={styles.deckView}>
-    <View style={styles.block1}>
-      <Text style={commonStyles.h1}>TITLE</Text>
-      <Text style={[commonStyles.h3, commonStyles.secondaryText]}>10 cards</Text>
-    </View>
-    <View style={styles.block2}>
-      <BaseTouch
-        button
-        text="Add Card"
-        onPress={() => alert('add a card')}
-        disabled={false}
-      />
-      <BaseTouch
-        button
-        text="Start Quiz"
-        onPress={() => alert('start quiz')}
-        disabled={false}
-        backgroundColor={purple}
-        color={white}
-        borderColor={white}
-      />
-      <BaseTouch
-        text="Delete Deck"
-        onPress={() => alert('delete deck')}
-        color={lightBordeaux}
-      />
-    </View>
-  </View>
-);
+type Props = {
+  deck: Deck,
+  navigation: NavigationScreenProp<NavigationState>,
+};
 
-DeckView.navigationOptions = ({ navigation }) => ({
-  title: navigation.state.params.id,
-});
+class DeckView extends Component<Props> {
+  static navigationOptions = ({
+    navigation,
+  }: {
+    navigation: NavigationScreenProp<NavigationState>
+  }) => {
+    const { deckTitle } = navigation.state.params;
+    return {
+      title: deckTitle || '',
+    };
+  };
+
+  componentDidMount() {
+    const { deck, navigation } = this.props;
+    navigation.setParams({
+      deckTitle: deck.title,
+    });
+  }
+
+  render() {
+    const { deck } = this.props;
+    const numOfCards: number = deck.cards.length;
+    return (
+      <View style={styles.deckView}>
+        <View style={styles.block1}>
+          <Text style={commonStyles.h1}>{deck.title}</Text>
+          <Text style={[commonStyles.h3, commonStyles.secondaryText]}>{numOfCards} cards</Text>
+        </View>
+        <View style={styles.block2}>
+          <BaseTouch
+            button
+            text="Add Card"
+            onPress={() => alert('add a card')}
+          />
+          <BaseTouch
+            button
+            text="Start Quiz"
+            onPress={() => alert('start quiz')}
+            disabled={numOfCards === 0}
+            backgroundColor={purple}
+            color={white}
+            borderColor={white}
+          />
+          <BaseTouch
+            text="Delete Deck"
+            onPress={() => alert('delete deck')}
+            color={lightBordeaux}
+          />
+        </View>
+      </View>
+    );
+  }
+}
 
 export default DeckView;

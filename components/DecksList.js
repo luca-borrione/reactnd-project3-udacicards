@@ -5,8 +5,10 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { type NavigationState, type NavigationScreenProp } from 'react-navigation';
 import DeckSummary from './DeckSummary';
 import { palePurple } from '../utils/colors';
+import { type Deck } from '../utils/types';
 
 const styles = StyleSheet.create({
   decksList: {
@@ -15,68 +17,29 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = any;
+type Props = {
+  decks: Array<Deck>,
+  navigation: NavigationScreenProp<NavigationState>,
+};
 
-class DecksList extends Component<Props, any> {
+class DecksList extends Component<Props> {
   onPress = (deckId: string) => (): void => {
     const { navigation } = this.props;
-    console.log('on press', deckId);
-    navigation.navigate('DeckView', { id: deckId });
+    navigation.navigate('DeckView', { deckId });
   };
 
   render() {
-    const decks = {
-      deckA: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck2: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck3: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck4: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck5: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck6: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck7: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-      deck8: {
-        key: 'deckA',
-        title: 'titleA',
-        cards: [],
-      },
-    };
+    const { decks } = this.props;
 
     return (
       <View style={styles.decksList}>
         <ScrollView>
-          {Object.keys(decks).map((key, index, array) => (
+          {decks.map((deck, index, array) => (
             <DeckSummary
-              key={key}
-              title={decks[key].title}
-              numOfCards={decks[key].cards.length}
-              onPress={this.onPress(key)}
+              key={deck.id}
+              title={deck.title}
+              numOfCards={deck.cards.length}
+              onPress={this.onPress(deck.id)}
               lastChild={index === array.length - 1}
             />
           ))}

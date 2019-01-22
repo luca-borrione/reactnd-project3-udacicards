@@ -1,6 +1,6 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
-import DeckView from './DeckView';
+import DeckView from '../containers/DeckView';
 import { purple, white, palePurple } from '../utils/colors';
 
 const Navigation = createStackNavigator({

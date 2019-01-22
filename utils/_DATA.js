@@ -22,6 +22,7 @@ function generateUID(): string {
 const formatDeck = ({ title }: UnformattedDeck): Deck => ({
   id: generateUID(),
   cards: [],
+  timestamp: Date.now(),
   title,
 });
 

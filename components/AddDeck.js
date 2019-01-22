@@ -55,7 +55,7 @@ class AddDeck extends Component<Props, State> {
     const { navigation, setDeck, setReadyState } = this.props;
     const { title } = this.state;
     const deck: Deck = await setDeck(title);
-    navigation.navigate('DeckView', { id: deck.id });
+    navigation.navigate('DeckView', { deckId: deck.id });
     this.setState({ title: '' });
     setReadyState();
   }

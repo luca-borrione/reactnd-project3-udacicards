@@ -13,14 +13,23 @@ export type UnformattedDeck = {
 export type Deck = {
   cards: Array<string>,
   id: string,
+  timestamp: number,
   title: string,
 };
+export type IDeckMap = {
+  cards: List<string>,
+  id: string,
+  timestamp: number,
+  title: string,
+}
 export type DeckKey =
   | 'cards'
   | 'id'
+  | 'timestamp'
   | 'title'
 export type DeckValue =
   | string
+  | number
   | List<string>
 export type DeckMap = Map<DeckKey, DeckValue>;
 
