@@ -58,7 +58,16 @@ class DeckView extends Component<Props> {
     }
   }
 
-  handleDeleteDeck = async () => {
+  touchAddCard = () => {
+    const { deck, navigation } = this.props;
+    if (deck) {
+      navigation.navigate('AddCard', { deckId: deck.id });
+    } else {
+      throw new Error('undefined deck');
+    }
+  };
+
+  touchDeleteDeck = async () => {
     const {
       deck,
       navigation,
@@ -90,7 +99,7 @@ class DeckView extends Component<Props> {
           <BaseTouch
             button
             text="Add Card"
-            onPress={() => alert('add a card')}
+            onPress={this.touchAddCard}
             disabled={busy}
           />
           <BaseTouch
@@ -104,7 +113,7 @@ class DeckView extends Component<Props> {
           />
           <BaseTouch
             text="Delete Deck"
-            onPress={this.handleDeleteDeck}
+            onPress={this.touchDeleteDeck}
             color={lightBordeaux}
             disabled={busy}
           />

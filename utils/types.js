@@ -1,10 +1,11 @@
 // @flow
 import { type Map, type List } from 'immutable';
+import { type CardsAction } from '../actions/cards';
 import { type DecksAction } from '../actions/decks';
 import { type StatusAction } from '../actions/status';
 
 
-/* Decks - - - -  */
+/* Decks - - - - */
 
 export type UnformattedDeck = {
   title: string,
@@ -38,15 +39,57 @@ export type Decks = {
 };
 export type DecksMap = Map<string, DeckMap>;
 
-/* endof Decks - - - -  */
+/* endof Decks - - - - */
+
+
+/* Cards - - - - */
+export type UnformattedCard = {
+  answer: string,
+  deckId: string,
+  question: string,
+};
+export type Card = {
+  answer: string,
+  deckId: string,
+  id: string,
+  question: string,
+  timestamp: number,
+};
+export type ICardMap = {
+  answer: string,
+  deckId: string,
+  id: string,
+  question: string,
+  timestamp: number,
+};
+export type CardKey =
+  | 'answer'
+  | 'deckId'
+  | 'id'
+  | 'question'
+  | 'timestamp'
+export type CardValue =
+  | string
+  | number
+export type CardMap = Map<CardKey, CardValue>;
+
+export type Cards = {
+  [key: string]: Card
+};
+export type CardsMap = Map<string, CardMap>;
+
+
+/* endof Cards - - - - */
 
 
 export type StateKey =
-  | 'status'
+  | 'cards'
   | 'decks'
+  | 'status'
 export type StateValue =
   | string
   | Map<string, mixed>
+  // | CardsMap
   // | DecksMap;
   // FIXME: see https://github.com/facebook/flow/issues/7308
 export type StateMap = Map<StateKey, StateValue>;
@@ -61,6 +104,7 @@ export type Action<T, P = void> = {
 }
 
 export type StoreAction =
+  | CardsAction
   | DecksAction
   | StatusAction
 
@@ -71,6 +115,7 @@ export type Thunk<T> = (dispatch: Dispatch<T>, getState: GetState) => any
 export type Dispatch<T> = (action: T | Thunk<T> | PromiseAction<T> | Array<T>) => any
 
 export type InitialData = {
+  cards: Cards,
   decks: Decks
 }
 

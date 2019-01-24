@@ -47,11 +47,11 @@ class AddDeck extends Component<Props, State> {
     title: '',
   }
 
-  handleTextChange = (title: string) => {
+  onChangeText = (title: string) => {
     this.setState({ title });
   }
 
-  handleSubmit = async () => {
+  onPressAddDeck = async () => {
     const { navigation, setDeck, setReadyState } = this.props;
     const { title } = this.state;
     const deck: Deck = await setDeck(title);
@@ -79,14 +79,14 @@ class AddDeck extends Component<Props, State> {
             style={commonStyles.inputText}
             value={title}
             placeholder="Deck Title"
-            onChangeText={this.handleTextChange}
+            onChangeText={this.onChangeText}
           />
         </View>
         <View style={styles.addDeckBlock2}>
           <BaseTouch
             button
             text="Add Deck"
-            onPress={this.handleSubmit}
+            onPress={this.onPressAddDeck}
             backgroundColor={purple}
             color={white}
             borderColor={white}

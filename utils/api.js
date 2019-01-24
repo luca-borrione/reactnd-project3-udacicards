@@ -1,30 +1,42 @@
 // @flow
 import {
+  _getCards,
   _getDecks,
+  _saveCard,
   _saveDeck,
   _dropDeck,
 } from './_DATA';
 import {
   type Deck,
   type Decks,
+  type Card,
+  type Cards,
   type InitialData,
 } from './types';
 
 export const getInitialData = (): Promise<InitialData> => (
   Promise.all([
+    (_getCards(): Cards),
     (_getDecks(): Decks),
   ])
-    .then(([decks]) => ({
+    .then(([cards, decks]) => ({
+      cards,
       decks,
     }))
 );
 
-export function saveDeck(title: string): Promise<Deck> {
-  return _saveDeck({ title });
-}
+export const saveDeck = (title: string): Promise<Deck> => (
+  _saveDeck({ title })
+);
 
-export function dropDeck(deckId: string): Promise<void> {
-  return _dropDeck(deckId);
-}
+export const dropDeck = (deckId: string): Promise<void> => (
+  _dropDeck(deckId)
+);
 
-export default undefined;
+export const saveCard = (deckId: string, question: string, answer: string): Promise<Card> => (
+  _saveCard({
+    answer,
+    deckId,
+    question,
+  })
+);

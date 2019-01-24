@@ -1,11 +1,13 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import DeckView from '../containers/DeckView';
+import AddCard from '../containers/AddCard';
 import { purple, white, palePurple } from '../utils/colors';
 
 const Navigation = createStackNavigator({
   HomeScreen,
   DeckView,
+  AddCard,
 },
 {
   initialRouteName: 'HomeScreen',

@@ -5,9 +5,18 @@ import {
   type Deck,
   type Decks,
   type UnformattedDeck,
+  type Card,
+  type Cards,
+  type UnformattedCard,
 } from './types';
 
+export const CARDS_STORAGE_KEY = 'UdaciCards:cards';
 export const DECKS_STORAGE_KEY = 'UdaciCards:decks';
+
+export function _getCards(): Promise<Cards> {
+  return AsyncStorage.getItem(CARDS_STORAGE_KEY)
+    .then(JSON.parse);
+}
 
 export function _getDecks(): Promise<Decks> {
   window.myAsyncStorage = AsyncStorage;// TODO: REMOVE ME
@@ -43,6 +52,26 @@ export function _dropDeck(deckId: string): Promise<void> {
     });
 }
 
-export function clear() {
-  return AsyncStorage.clear();
-}
+const formatCard = ({
+  answer,
+  deckId,
+  question,
+}: UnformattedCard): Card => ({
+  answer,
+  id: generateUID(),
+  deckId,
+  question,
+  timestamp: Date.now(),
+});
+
+export const _saveCard = async (unformattedCard: UnformattedCard): Promise<Card> => {
+  const card: Card = formatCard(unformattedCard);
+  await AsyncStorage.mergeItem(CARDS_STORAGE_KEY, JSON.stringify({
+    [card.id]: card,
+  }));
+  const results = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+  const data = JSON.parse(results);
+  data[card.deckId].cards.push(card.id);
+  await AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
+  return card;
+};

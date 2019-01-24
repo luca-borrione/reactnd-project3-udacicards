@@ -1,5 +1,6 @@
 // @flow
 import { getInitialData } from '../../utils/api';
+import { initCards, type InitCardsAction } from '../cards';
 import { initDecks, type InitDecksAction } from '../decks';
 import {
   setBusyState, type SetBusyStateAction,
@@ -13,6 +14,7 @@ import {
 
 export type InitialDataAction =
   | SetBusyStateAction
+  | InitCardsAction
   | InitDecksAction
   | SetReadyStateAction
 
@@ -20,7 +22,8 @@ function handleInitialData(): Thunk<InitialDataAction> {
   return (dispatch: Dispatch<InitialDataAction>): Promise<void> => {
     dispatch(setBusyState());
     return getInitialData()
-      .then(({ decks }: InitialData) => {
+      .then(({ cards, decks }: InitialData) => {
+        dispatch(initCards(cards));
         dispatch(initDecks(decks));
         dispatch(setReadyState());
       });
