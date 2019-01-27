@@ -98,7 +98,8 @@ class AddDeck extends Component<Props, State> {
             backgroundColor={purple}
             color={white}
             borderColor={white}
-            disabled={title === DEFAULT_TITLE || busy}
+            inactive={busy}
+            disabled={title === DEFAULT_TITLE}
           />
         </View>
       </KeyboardAvoidingView>

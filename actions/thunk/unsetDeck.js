@@ -3,6 +3,7 @@ import { dropDeck } from '../../utils/api';
 import { removeDeck, type RemoveDeckAction } from '../decks';
 import {
   setBusyState, type SetBusyStateAction,
+  setReadyState, type SetReadyStateAction,
 } from '../status';
 import {
   type Dispatch,
@@ -11,6 +12,7 @@ import {
 
 export type UnsetDeckAction =
   | SetBusyStateAction
+  | SetReadyStateAction
   | RemoveDeckAction
 
 function unsetDeck(
@@ -21,6 +23,7 @@ function unsetDeck(
     return dropDeck(deckId)
       .then((): void => {
         dispatch(removeDeck(deckId));
+        dispatch(setReadyState());
       });
   };
 }

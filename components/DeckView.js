@@ -33,7 +33,6 @@ type Props = {
   busy: boolean,
   deck: Deck | void,
   navigation: NavigationScreenProp<NavigationState>,
-  setReadyState: () => void,
   unsetDeck: (deckId: string) => Promise<void>,
 };
 
@@ -49,7 +48,7 @@ class DeckView extends Component<Props> {
     };
   };
 
-  componentDidMount() {
+  componentDidMount(): void {
     const { deck, navigation } = this.props;
     if (deck) {
       navigation.setParams({
@@ -60,35 +59,31 @@ class DeckView extends Component<Props> {
 
   onPressAddCard = () => {
     const { deck, navigation } = this.props;
-    if (deck) {
+    if (deck && !this.isNavigating()) {
       navigation.navigate('AddCard', { deckId: deck.id });
-    } else {
-      throw new Error('undefined deck');
     }
   };
 
   onPressStartQuiz = () => {
     const { deck, navigation } = this.props;
-    if (deck) {
+    if (deck && !this.isNavigating()) {
       navigation.navigate('Quiz', { deckId: deck.id });
-    } else {
-      throw new Error('undefined deck');
     }
   };
 
   onPressDeleteDeck = async () => {
-    const {
-      deck,
-      navigation,
-      unsetDeck,
-      setReadyState,
-    } = this.props;
-    if (deck) {
+    const { deck, navigation, unsetDeck } = this.props;
+
+    if (deck && !this.isNavigating()) {
       await unsetDeck(deck.id);
       navigation.navigate('DecksList');
-      setReadyState();
     }
   };
+
+  isNavigating(): boolean {
+    const { navigation } = this.props;
+    return !navigation.isFocused();
+  }
 
   render(): Element<typeof View> | null {
     const { busy, deck } = this.props;
@@ -109,13 +104,14 @@ class DeckView extends Component<Props> {
             button
             text="Add Card"
             onPress={this.onPressAddCard}
-            disabled={busy}
+            inactive={busy}
           />
           <BaseTouch
             button
             text="Start Quiz"
             onPress={this.onPressStartQuiz}
-            disabled={numOfCards === 0 || busy}
+            disabled={numOfCards === 0}
+            inactive={busy}
             backgroundColor={purple}
             color={white}
             borderColor={white}
@@ -124,7 +120,7 @@ class DeckView extends Component<Props> {
             text="Delete Deck"
             onPress={this.onPressDeleteDeck}
             color={lightBordeaux}
-            disabled={busy}
+            inactive={busy}
           />
         </View>
       </View>

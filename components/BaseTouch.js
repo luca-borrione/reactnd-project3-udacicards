@@ -7,7 +7,7 @@ import {
   StyleSheet,
   type Styles,
 } from 'react-native';
-import { purple, white } from '../utils/colors';
+import { purple, red, white } from '../utils/colors';
 
 const styles: Styles = StyleSheet.create({
   baseTouch: {
@@ -23,6 +23,9 @@ const styles: Styles = StyleSheet.create({
   baseTouchDisabled: {
     opacity: 0.5,
   },
+  baseTouchInactive: {
+    borderColor: red,
+  },
   baseTouchText: {
     fontSize: 24,
     textAlign: 'center',
@@ -35,7 +38,8 @@ type Props = {
   borderColor?: string,
   button?: boolean,
   color?: string,
-  disabled?: boolean,
+  disabled?: boolean, // cannot be pressed and with opacity 0.5
+  inactive?: boolean, // cannot be pressed
   onPress: () => void | Promise<void>,
   text: string,
 };
@@ -46,6 +50,7 @@ const BaseTouch = ({
   button,
   color,
   disabled,
+  inactive,
   onPress,
   text,
 }: Props): Element<typeof TouchableOpacity> => (
@@ -55,9 +60,10 @@ const BaseTouch = ({
       button ? styles.baseTouchButton : {},
       button ? { backgroundColor, borderColor } : {},
       disabled ? styles.baseTouchDisabled : {},
+      // inactive ? styles.baseTouchInactive : {}, // KEEP THIS LINE FOR DEBUGGING
     ]}
     onPress={onPress}
-    disabled={disabled}
+    disabled={disabled || inactive}
   >
     <Text style={[styles.baseTouchText, { color }]}>{text}</Text>
   </TouchableOpacity>
@@ -69,6 +75,7 @@ BaseTouch.defaultProps = {
   button: false,
   color: purple,
   disabled: false,
+  inactive: false,
 };
 
 export default BaseTouch;

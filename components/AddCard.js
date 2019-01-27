@@ -110,7 +110,8 @@ class AddCard extends Component<Props, State> {
             button
             text="Add Card"
             onPress={this.onPressAddCard}
-            disabled={question === DEFAULT_QUESTION || answer === DEFAULT_ANSWER || busy}
+            inactive={busy}
+            disabled={question === DEFAULT_QUESTION || answer === DEFAULT_ANSWER}
           />
         </View>
       </KeyboardAvoidingView>

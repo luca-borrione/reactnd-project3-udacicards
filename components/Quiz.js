@@ -1,79 +1,28 @@
 // @flow
-/* eslint-disable no-return-assign */
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
 import {
   NavigationActions,
   type NavigationState,
   type NavigationScreenProp,
 } from 'react-navigation';
 import CardFlip from 'react-native-card-flip';
-import BaseTouch from './BaseTouch';
+import QuizCard from './QuizCard';
 import QuizResult from './QuizResult';
-import commonStyles from '../utils/styles';
 import { type Card } from '../utils/types';
 
-const styles = StyleSheet.create({
-  cardContainer: {
-    flex: 1,
-    width: '100%',
-  },
-  card: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: '#FE474C',
-    borderRadius: Platform.OS === 'ios' ? 10 : 2,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardQuestion: {
-    backgroundColor: '#FE474C',
-  },
-  cardAnswer: {
-    backgroundColor: '#FEB12C',
-  },
-  cardLabel: {
-    fontSize: 24,
-    color: 'white',
-    textAlign: 'center',
-    flexWrap: 'wrap',
-    width: '90%',
-    fontFamily: 'System',
-  },
-});
-
-const QUESTION_SIDE = 'question_side';
-const ANSWER_SIDE = 'answer_side';
 const DEFAULT_STATE = {
-  cardIndex: 0,
-  cardSide: QUESTION_SIDE,
+  index: 0,
   correctCards: new Set(),
   incorrectCards: new Set(),
 };
 
 type Props = {
-  busy: boolean,
   cards: Array<Card>,
   navigation: NavigationScreenProp<NavigationState>,
-  setBusyState: () => void,
-  setReadyState: () => void,
 };
 
 type State = {
-  cardIndex: number,
-  cardSide: string,
+  index: number,
   correctCards: Set<string>,
   incorrectCards: Set<string>,
 };
@@ -94,95 +43,50 @@ class Quiz extends Component<Props, State> {
 
   state = DEFAULT_STATE;
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.updateTitle();
   }
 
-  setCardSide = (cardSide: string): void => {
-    this.setState({ cardSide });
+  getCurrentCard(): Card {
+    const { index } = this.state;
+    const { cards } = this.props;
+    const card: Card | void = cards[index];
+    if (card) {
+      return card;
+    }
+    throw new Error('cannot retrieve current card');
   }
 
-  showQuestion = () => {
-    const { setBusyState } = this.props;
-    setBusyState();
-    setTimeout(this.setCardSide, 250, QUESTION_SIDE);
-    this.cardFlip.flip();
-  };
+  increaseIndex = (callback?: () => void): void => {
+    this.setState(prevState => ({
+      index: prevState.index + 1,
+    }), callback);
+  }
 
-  showAnswer = () => {
-    const { setBusyState } = this.props;
-    setBusyState();
-    setTimeout(this.setCardSide, 250, ANSWER_SIDE);
-    this.cardFlip.flip();
-  };
-
-  onPressCorrect = () => {
-    const { cardIndex } = this.state;
-    const { cards } = this.props;
-    const card = cards[cardIndex];
+  addCorrectCard = (callback?: () => void): void => {
+    const card: Card = this.getCurrentCard();
     this.setState(prevState => ({
       correctCards: new Set([...prevState.correctCards, card.id]),
-    }));
-    this.next();
+    }), callback);
   };
 
-  onPressIncorrect = () => {
-    const { cardIndex } = this.state;
-    const { cards } = this.props;
-    const card = cards[cardIndex];
+  addIncorrectCard = (callback?: () => void): void => {
+    const card: Card = this.getCurrentCard();
     this.setState(prevState => ({
       incorrectCards: new Set([...prevState.incorrectCards, card.id]),
-    }));
-    this.next();
+    }), callback);
   };
 
-  onCardFlipEnd = () => {
-    const { setReadyState } = this.props;
-    setReadyState();
-  };
-
-  backToDeck = () => {
+  backToDeck = (): void => {
     const { navigation } = this.props;
     navigation.dispatch(NavigationActions.back());
   }
 
-  restartQuiz = () => {
+  restartQuiz = (): void => {
     this.setState(DEFAULT_STATE, this.updateTitle);
   }
 
-  goToNextCard() {
-    const { cardSide } = this.state;
-
-    const setState = () => {
-      this.setState(prevState => ({
-        cardIndex: prevState.cardIndex + 1,
-      }));
-      this.updateTitle();
-    };
-
-    if (cardSide === ANSWER_SIDE) {
-      setTimeout(setState, 250);
-      this.showQuestion();
-    } else {
-      setState();
-    }
-  }
-
-  nextCardExists(): boolean {
-    const { cardIndex } = this.state;
-    const { cards } = this.props;
-    return cardIndex < cards.length - 1;
-  }
-
-  goToResult() {
-    const { navigation } = this.props;
-    navigation.setParams({ title: 'Result' });
-    this.setState(prevState => ({
-      cardIndex: prevState.cardIndex + 1,
-    }));
-  }
-
-  next() {
+  next = (): void => {
     if (this.nextCardExists()) {
       this.goToNextCard();
     } else {
@@ -190,25 +94,36 @@ class Quiz extends Component<Props, State> {
     }
   }
 
+  nextCardExists(): boolean {
+    const { index } = this.state;
+    const { cards } = this.props;
+    return index < cards.length - 1;
+  }
+
+  goToNextCard(): void {
+    this.increaseIndex(this.updateTitle);
+  }
+
+  goToResult() {
+    const { navigation } = this.props;
+    navigation.setParams({ title: 'Result' });
+    this.increaseIndex();
+  }
+
   updateTitle() {
     const { cards, navigation } = this.props;
-    const { cardIndex } = this.state;
+    const { index } = this.state;
     navigation.setParams({
-      title: `card ${cardIndex + 1} of ${cards.length}`,
+      title: `card ${index + 1} of ${cards.length}`,
     });
   }
 
   render() {
-    const {
-      cardIndex,
-      cardSide,
-      correctCards,
-      incorrectCards,
-    } = this.state;
-    const { busy, cards } = this.props;
-    const card = cards[cardIndex];
+    const { index } = this.state;
+    const { cards } = this.props;
 
-    if (cardIndex >= cards.length) {
+    if (index >= cards.length) {
+      const { correctCards, incorrectCards } = this.state;
       return (
         <QuizResult
           numOfCorrectCards={correctCards.size}
@@ -219,63 +134,14 @@ class Quiz extends Component<Props, State> {
       );
     }
 
+    const card: Card = this.getCurrentCard();
     return (
-      <View style={commonStyles.screenContainer}>
-        <View style={commonStyles.blockTop}>
-          <CardFlip
-            style={styles.cardContainer}
-            ref={cardFlip => this.cardFlip = cardFlip}
-            onFlipEnd={this.onCardFlipEnd}
-          >
-            <TouchableOpacity
-              activeOpacity={1}
-              style={[styles.card, styles.cardQuestion]}
-              onPress={this.showAnswer}
-              disabled={busy}
-            >
-              <Text style={styles.cardLabel} numberOfLines={5}>
-                {card.question}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={1}
-              style={[styles.card, styles.cardAnswer]}
-              onPress={this.showQuestion}
-              disabled={busy}
-            >
-              <Text style={styles.cardLabel}>{card.answer}</Text>
-            </TouchableOpacity>
-          </CardFlip>
-        </View>
-        {cardSide === QUESTION_SIDE
-          ? (
-            <View style={commonStyles.blockBottom}>
-              <BaseTouch
-                button
-                text="Show Answer"
-                onPress={this.showAnswer}
-                disabled={busy}
-              />
-            </View>
-          )
-          : (
-            <View style={commonStyles.blockBottom}>
-              <BaseTouch
-                button
-                text="Correct"
-                onPress={this.onPressCorrect}
-                disabled={busy}
-              />
-              <BaseTouch
-                button
-                text="Incorrect"
-                onPress={this.onPressIncorrect}
-                disabled={busy}
-              />
-            </View>
-          )
-        }
-      </View>
+      <QuizCard
+        card={card}
+        addCorrectCard={this.addCorrectCard}
+        addIncorrectCard={this.addIncorrectCard}
+        next={this.next}
+      />
     );
   }
 }

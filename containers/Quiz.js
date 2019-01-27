@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import { type NavigationState, type NavigationScreenProp } from 'react-navigation';
 import { type List } from 'immutable';
 import toJS from '../hoc/to-js';
-import { BUSY_STATE } from '../states/status';
 import { getCardsByIds } from '../selectors/cards';
 import { getCardsInDeck } from '../selectors/decks';
-import { getStatus } from '../selectors/status';
 import {
   setReadyState, type SetReadyStateAction,
   setBusyState, type SetBusyStateAction,
@@ -24,13 +22,11 @@ type Props = {
 };
 
 const mapStateToProps = (state: StateMap, { navigation }: Props): {
-  busy: boolean,
   cards: List<CardMap>
 } => {
   const { deckId } = navigation.state.params;
   const cardsInDeck: List<string> = expectList(getCardsInDeck(state, deckId));
   return {
-    busy: getStatus(state) === BUSY_STATE,
     cards: getCardsByIds(state, cardsInDeck),
   };
 };

@@ -6,7 +6,6 @@ import { getStatus } from '../selectors/status';
 import toJS from '../hoc/to-js';
 import unsetDeck, { type UnsetDeckAction } from '../actions/thunk/unsetDeck';
 import { getDeckById } from '../selectors/decks';
-import { setReadyState, type SetReadyStateAction } from '../actions/status';
 import DeckView from '../components/DeckView';
 import {
   type Dispatch,
@@ -32,14 +31,10 @@ const mapStateToProps = (state: StateMap, { navigation }: Props): {
 
 type Action =
   | Thunk<UnsetDeckAction>
-  | SetReadyStateAction
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   unsetDeck: (deckId: string): Promise<void> => (
     dispatch(unsetDeck(deckId))
-  ),
-  setReadyState: (): void => (
-    dispatch(setReadyState())
   ),
 });
 

@@ -19,7 +19,6 @@ export function _getCards(): Promise<Cards> {
 }
 
 export function _getDecks(): Promise<Decks> {
-  window.myAsyncStorage = AsyncStorage;// TODO: REMOVE ME
   return AsyncStorage.getItem(DECKS_STORAGE_KEY)
     .then(JSON.parse);
 }
