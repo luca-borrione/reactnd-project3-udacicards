@@ -9,9 +9,6 @@ import { getDeckById } from '../selectors/decks';
 import { setReadyState, type SetReadyStateAction } from '../actions/status';
 import DeckView from '../components/DeckView';
 import {
-  expectMap,
-} from '../utils/helpers';
-import {
   type Dispatch,
   type Thunk,
   type DeckMap,

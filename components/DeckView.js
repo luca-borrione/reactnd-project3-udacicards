@@ -58,7 +58,7 @@ class DeckView extends Component<Props> {
     }
   }
 
-  touchAddCard = () => {
+  onPressAddCard = () => {
     const { deck, navigation } = this.props;
     if (deck) {
       navigation.navigate('AddCard', { deckId: deck.id });
@@ -67,7 +67,16 @@ class DeckView extends Component<Props> {
     }
   };
 
-  touchDeleteDeck = async () => {
+  onPressStartQuiz = () => {
+    const { deck, navigation } = this.props;
+    if (deck) {
+      navigation.navigate('Quiz', { deckId: deck.id });
+    } else {
+      throw new Error('undefined deck');
+    }
+  };
+
+  onPressDeleteDeck = async () => {
     const {
       deck,
       navigation,
@@ -81,7 +90,7 @@ class DeckView extends Component<Props> {
     }
   };
 
-  render() {
+  render(): Element<typeof View> | null {
     const { busy, deck } = this.props;
 
     if (!deck) {
@@ -99,13 +108,13 @@ class DeckView extends Component<Props> {
           <BaseTouch
             button
             text="Add Card"
-            onPress={this.touchAddCard}
+            onPress={this.onPressAddCard}
             disabled={busy}
           />
           <BaseTouch
             button
             text="Start Quiz"
-            onPress={() => alert('start quiz')}
+            onPress={this.onPressStartQuiz}
             disabled={numOfCards === 0 || busy}
             backgroundColor={purple}
             color={white}
@@ -113,7 +122,7 @@ class DeckView extends Component<Props> {
           />
           <BaseTouch
             text="Delete Deck"
-            onPress={this.touchDeleteDeck}
+            onPress={this.onPressDeleteDeck}
             color={lightBordeaux}
             disabled={busy}
           />

@@ -3,6 +3,7 @@ import { type Reducer } from 'redux';
 import { combineReducers } from 'redux-immutable';
 import cards from './cards';
 import decks from './decks';
+import quiz from './quiz';
 import status from './status';
 import {
   type StateMap,
@@ -12,6 +13,7 @@ import {
 const reducers = {
   cards,
   decks,
+  quiz,
   status,
 };
 

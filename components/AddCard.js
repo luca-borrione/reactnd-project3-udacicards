@@ -15,7 +15,7 @@ import BaseTouch from './BaseTouch';
 import commonStyles from '../utils/styles';
 
 const styles = StyleSheet.create({
-  containerCenter: {
+  addCard: {
     flex: 1,
   },
   addDeckBlock1: {
@@ -90,7 +90,7 @@ class AddCard extends Component<Props, State> {
     const { answer, question } = this.state;
     const { busy } = this.props;
     return (
-      <KeyboardAvoidingView style={styles.containerCenter} behavior="padding">
+      <KeyboardAvoidingView style={styles.addCard} behavior="padding">
         <View style={styles.addDeckBlock1}>
           <TextInput
             value={question}

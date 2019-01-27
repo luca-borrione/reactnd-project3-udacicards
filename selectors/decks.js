@@ -39,3 +39,11 @@ export const getDecks = (state: StateMap): List<DeckMap> => (
 export const getDeckById = (state: StateMap, deckId: string): DeckMap | void => (
   decks(state).get(deckId)
 );
+
+export const getCardsInDeck = (state: StateMap, deckId: string): List<string> | void => {
+  const deckMap: DeckMap | void = getDeckById(state, deckId);
+  if (deckMap) {
+    return expectList(deckMap.get('cards'));
+  }
+  return undefined;
+};

@@ -2,11 +2,11 @@
 import { type Map, type List } from 'immutable';
 import { type CardsAction } from '../actions/cards';
 import { type DecksAction } from '../actions/decks';
+import { type QuizAction } from '../actions/quiz';
 import { type StatusAction } from '../actions/status';
 
 
 /* Decks - - - - */
-
 export type UnformattedDeck = {
   title: string,
 };
@@ -38,7 +38,6 @@ export type Decks = {
   [key: string]: Deck
 };
 export type DecksMap = Map<string, DeckMap>;
-
 /* endof Decks - - - - */
 
 
@@ -77,14 +76,38 @@ export type Cards = {
   [key: string]: Card
 };
 export type CardsMap = Map<string, CardMap>;
-
-
 /* endof Cards - - - - */
 
+
+/* Quiz - - - - */
+export type Quiz = {
+  cardIndex: number,
+  correctCards: Array<string>,
+  deckId: string,
+  incorrectCards: Array<string>,
+};
+export type IQuizMap = {
+  cardIndex: number,
+  correctCards: List<string>,
+  deskId: string,
+  incorrectCards: List<string>,
+};
+export type QuizKey =
+  | 'cardIndex'
+  | 'correctCards'
+  | 'deckId'
+  | 'incorrectCards'
+export type QuizValue =
+  | number
+  | string
+  | List<string>
+export type QuizMap = Map<QuizKey, QuizValue>;
+/* endof Quiz - - - - */
 
 export type StateKey =
   | 'cards'
   | 'decks'
+  | 'quiz'
   | 'status'
 export type StateValue =
   | string
@@ -106,6 +129,7 @@ export type Action<T, P = void> = {
 export type StoreAction =
   | CardsAction
   | DecksAction
+  | QuizAction
   | StatusAction
 
 type GetState = () => StateMap

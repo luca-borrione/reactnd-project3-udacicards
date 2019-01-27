@@ -32,6 +32,22 @@ const styles = StyleSheet.create({
     fontSize: 22,
     // margin: 20,
   },
+  screenContainer: {
+    flex: 1,
+  },
+  blockTop: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    margin: 20,
+  },
+  blockBottom: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 40,
+    marginLeft: 40,
+    marginRight: 40,
+  },
 });
 
 export default styles;

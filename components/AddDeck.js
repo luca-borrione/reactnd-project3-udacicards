@@ -42,25 +42,33 @@ type State = {
   title: string,
 };
 
+const DEFAULT_TITLE = '';
+
 class AddDeck extends Component<Props, State> {
   state = {
-    title: '',
+    title: DEFAULT_TITLE,
   }
 
-  onChangeText = (title: string) => {
+  onChangeText = (title: string): void => {
     this.setState({ title });
   }
 
-  onPressAddDeck = async () => {
+  onPressAddDeck = async (): Promise<void> => {
     const { navigation, setDeck, setReadyState } = this.props;
     const { title } = this.state;
     const deck: Deck = await setDeck(title);
     navigation.navigate('DeckView', { deckId: deck.id });
-    this.setState({ title: '' });
+    this.resetState();
     setReadyState();
   }
 
-  render() {
+  resetState() {
+    this.setState({
+      title: DEFAULT_TITLE,
+    });
+  }
+
+  render(): Element<typeof KeyboardAvoidingView> {
     const { title } = this.state;
     const { busy } = this.props;
 
@@ -90,7 +98,7 @@ class AddDeck extends Component<Props, State> {
             backgroundColor={purple}
             color={white}
             borderColor={white}
-            disabled={title === '' || busy}
+            disabled={title === DEFAULT_TITLE || busy}
           />
         </View>
       </KeyboardAvoidingView>
