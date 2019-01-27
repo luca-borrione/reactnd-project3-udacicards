@@ -40,7 +40,6 @@ type Props = {
   busy: boolean,
   navigation: NavigationScreenProp<NavigationState>,
   addCard: (question: string, answer: string) => Promise<void>,
-  setReadyState: () => void,
 };
 
 type State = {
@@ -50,12 +49,13 @@ type State = {
 
 const DEFAULT_ANSWER = '';
 const DEFAULT_QUESTION = '';
+const DEFAULT_STATE: State = {
+  answer: DEFAULT_ANSWER,
+  question: DEFAULT_QUESTION,
+};
 
 class AddCard extends Component<Props, State> {
-  state = {
-    answer: DEFAULT_ANSWER,
-    question: DEFAULT_QUESTION,
-  };
+  state = DEFAULT_STATE;
 
   onChangeAnswerText = (answer: string) => {
     this.setState({ answer });
@@ -66,12 +66,13 @@ class AddCard extends Component<Props, State> {
   };
 
   onPressAddCard = async () => {
-    const { addCard, setReadyState } = this.props;
+    const { addCard } = this.props;
     const { answer, question } = this.state;
-    await addCard(question, answer);
-    this.navigateBack();
-    this.resetState();
-    setReadyState();
+    if (!this.isNavigating()) {
+      await addCard(question, answer);
+      this.navigateBack();
+      this.resetState();
+    }
   }
 
   navigateBack() {
@@ -80,10 +81,12 @@ class AddCard extends Component<Props, State> {
   }
 
   resetState() {
-    this.setState({
-      answer: DEFAULT_ANSWER,
-      question: DEFAULT_QUESTION,
-    });
+    this.setState(DEFAULT_STATE);
+  }
+
+  isNavigating(): boolean {
+    const { navigation } = this.props;
+    return !navigation.isFocused();
   }
 
   render() {

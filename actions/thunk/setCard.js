@@ -4,6 +4,7 @@ import { addCard, type AddCardAction } from '../cards';
 import { addCardToDeck, type AddCardToDeckAction } from '../decks';
 import {
   setBusyState, type SetBusyStateAction,
+  setReadyState, type SetReadyStateAction,
 } from '../status';
 import {
   type Card,
@@ -13,6 +14,7 @@ import {
 
 export type SetCardAction =
   | SetBusyStateAction
+  | SetReadyStateAction
   | AddCardAction
   | AddCardToDeckAction
 
@@ -27,6 +29,7 @@ function setCard(
       .then((card: Card): void => {
         dispatch(addCard(card));
         dispatch(addCardToDeck(card.id, deckId));
+        dispatch(setReadyState());
       });
   };
 }

@@ -35,37 +35,41 @@ type Props = {
   busy: boolean,
   navigation: NavigationScreenProp<NavigationState>,
   setDeck: (title: string) => Promise<Deck>,
-  setReadyState: () => void,
 };
 
 type State = {
   title: string,
 };
 
-const DEFAULT_TITLE = '';
+const DEFAULT_TITLE: string = '';
+const DEFAULT_STATE: State = {
+  title: DEFAULT_TITLE,
+};
 
 class AddDeck extends Component<Props, State> {
-  state = {
-    title: DEFAULT_TITLE,
-  }
+  state = DEFAULT_STATE;
 
   onChangeText = (title: string): void => {
     this.setState({ title });
   }
 
   onPressAddDeck = async (): Promise<void> => {
-    const { navigation, setDeck, setReadyState } = this.props;
+    const { navigation, setDeck } = this.props;
     const { title } = this.state;
-    const deck: Deck = await setDeck(title);
-    navigation.navigate('DeckView', { deckId: deck.id });
-    this.resetState();
-    setReadyState();
+    if (!this.isNavigating()) {
+      const deck: Deck = await setDeck(title);
+      navigation.navigate('DeckView', { deckId: deck.id });
+      this.resetState();
+    }
   }
 
   resetState() {
-    this.setState({
-      title: DEFAULT_TITLE,
-    });
+    this.setState(DEFAULT_STATE);
+  }
+
+  isNavigating(): boolean {
+    const { navigation } = this.props;
+    return !navigation.isFocused();
   }
 
   render(): Element<typeof KeyboardAvoidingView> {

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { BUSY_STATE } from '../states/status';
 import { getStatus } from '../selectors/status';
 import setDeck, { type SetDeckAction } from '../actions/thunk/setDeck';
-import { setReadyState, type SetReadyStateAction } from '../actions/status';
 import AddDeck from '../components/AddDeck';
 import {
   type Dispatch,
@@ -20,14 +19,10 @@ const mapStateToProps = (state: StateMap): {
 
 type Action =
   | Thunk<SetDeckAction>
-  | SetReadyStateAction
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   setDeck: (title: string): Promise<Deck> => (
     dispatch(setDeck(title))
-  ),
-  setReadyState: (): void => (
-    dispatch(setReadyState())
   ),
 });
 

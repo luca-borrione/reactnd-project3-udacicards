@@ -3,6 +3,7 @@ import { saveDeck } from '../../utils/api';
 import { addDeck, type AddDeckAction } from '../decks';
 import {
   setBusyState, type SetBusyStateAction,
+  setReadyState, type SetReadyStateAction,
 } from '../status';
 import {
   type Dispatch,
@@ -12,6 +13,7 @@ import {
 
 export type SetDeckAction =
   | SetBusyStateAction
+  | SetReadyStateAction
   | AddDeckAction
 
 function setDeck(
@@ -22,6 +24,7 @@ function setDeck(
     return saveDeck(title)
       .then((deck: Deck): Deck => {
         dispatch(addDeck(deck));
+        dispatch(setReadyState());
         return deck;
       });
   };
