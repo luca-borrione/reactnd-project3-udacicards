@@ -8,19 +8,11 @@ import { getCardsByIds } from '../selectors/cards';
 import { getCardsInDeck } from '../selectors/decks';
 import { getStatus } from '../selectors/status';
 import {
-  addCorrectCard, type AddCorrectCardAction,
-  addIncorrectCard, type AddIncorrectCardAction,
-  initQuiz, type InitQuizAction,
-} from '../actions/quiz';
-import {
   setReadyState, type SetReadyStateAction,
   setBusyState, type SetBusyStateAction,
 } from '../actions/status';
 import Quiz from '../components/Quiz';
-import {
-  expectList,
-  expectString,
-} from '../utils/helpers';
+import { expectList } from '../utils/helpers';
 import {
   type CardMap,
   type Dispatch,
@@ -44,24 +36,11 @@ const mapStateToProps = (state: StateMap, { navigation }: Props): {
 };
 
 type Action =
-  | AddCorrectCardAction
-  | AddIncorrectCardAction
-  | InitQuizAction
   | SetBusyStateAction
   | SetReadyStateAction
 
-function mapDispatchToProps(dispatch: Dispatch<Action>, { navigation }) {
-  const { deckId } = navigation.state.params;
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    addCorrectCard: (cardId: string): void => {
-      dispatch(addCorrectCard(expectString(cardId)));
-    },
-    addIncorrectCard: (cardId: string): void => {
-      dispatch(addIncorrectCard(expectString(cardId)));
-    },
-    initQuiz: (): void => {
-      dispatch(initQuiz(expectString(deckId)));
-    },
     setBusyState: (): void => {
       dispatch(setBusyState());
     },

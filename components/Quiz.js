@@ -8,9 +8,14 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { type NavigationState, type NavigationScreenProp } from 'react-navigation';
+import {
+  NavigationActions,
+  type NavigationState,
+  type NavigationScreenProp,
+} from 'react-navigation';
 import CardFlip from 'react-native-card-flip';
 import BaseTouch from './BaseTouch';
+import QuizResult from './QuizResult';
 import commonStyles from '../utils/styles';
 import { type Card } from '../utils/types';
 
@@ -51,13 +56,16 @@ const styles = StyleSheet.create({
 
 const QUESTION_SIDE = 'question_side';
 const ANSWER_SIDE = 'answer_side';
+const DEFAULT_STATE = {
+  cardIndex: 0,
+  cardSide: QUESTION_SIDE,
+  correctCards: new Set(),
+  incorrectCards: new Set(),
+};
 
 type Props = {
-  addCorrectCard: (cardId: string) => void,
-  addIncorrectCard: (cardId: string) => void,
   busy: boolean,
   cards: Array<Card>,
-  initQuiz: () => void,
   navigation: NavigationScreenProp<NavigationState>,
   setBusyState: () => void,
   setReadyState: () => void,
@@ -66,6 +74,8 @@ type Props = {
 type State = {
   cardIndex: number,
   cardSide: string,
+  correctCards: Set<string>,
+  incorrectCards: Set<string>,
 };
 
 class Quiz extends Component<Props, State> {
@@ -82,15 +92,10 @@ class Quiz extends Component<Props, State> {
 
   cardFlip: typeof CardFlip = null;
 
-  state = {
-    cardIndex: 0,
-    cardSide: QUESTION_SIDE,
-  };
+  state = DEFAULT_STATE;
 
   componentDidMount() {
-    const { initQuiz } = this.props;
     this.updateTitle();
-    initQuiz();
   }
 
   setCardSide = (cardSide: string): void => {
@@ -113,17 +118,21 @@ class Quiz extends Component<Props, State> {
 
   onPressCorrect = () => {
     const { cardIndex } = this.state;
-    const { addCorrectCard, cards } = this.props;
+    const { cards } = this.props;
     const card = cards[cardIndex];
-    addCorrectCard(card.id);
+    this.setState(prevState => ({
+      correctCards: new Set([...prevState.correctCards, card.id]),
+    }));
     this.next();
   };
 
   onPressIncorrect = () => {
     const { cardIndex } = this.state;
-    const { addIncorrectCard, cards } = this.props;
+    const { cards } = this.props;
     const card = cards[cardIndex];
-    addIncorrectCard(card.id);
+    this.setState(prevState => ({
+      incorrectCards: new Set([...prevState.incorrectCards, card.id]),
+    }));
     this.next();
   };
 
@@ -132,26 +141,13 @@ class Quiz extends Component<Props, State> {
     setReadyState();
   };
 
-  updateTitle() {
-    const { cards, navigation } = this.props;
-    const { cardIndex } = this.state;
-    navigation.setParams({
-      title: `card ${cardIndex + 1} of ${cards.length}`,
-    });
+  backToDeck = () => {
+    const { navigation } = this.props;
+    navigation.dispatch(NavigationActions.back());
   }
 
-  next() {
-    if (this.nextCardExists()) {
-      this.goToNextCard();
-    } else {
-      this.goToResult();
-    }
-  }
-
-  nextCardExists(): boolean {
-    const { cardIndex } = this.state;
-    const { cards } = this.props;
-    return cardIndex < cards.length - 1;
+  restartQuiz = () => {
+    this.setState(DEFAULT_STATE, this.updateTitle);
   }
 
   goToNextCard() {
@@ -172,14 +168,57 @@ class Quiz extends Component<Props, State> {
     }
   }
 
+  nextCardExists(): boolean {
+    const { cardIndex } = this.state;
+    const { cards } = this.props;
+    return cardIndex < cards.length - 1;
+  }
+
   goToResult() {
-    alert('END OF DECK');
+    const { navigation } = this.props;
+    navigation.setParams({ title: 'Result' });
+    this.setState(prevState => ({
+      cardIndex: prevState.cardIndex + 1,
+    }));
+  }
+
+  next() {
+    if (this.nextCardExists()) {
+      this.goToNextCard();
+    } else {
+      this.goToResult();
+    }
+  }
+
+  updateTitle() {
+    const { cards, navigation } = this.props;
+    const { cardIndex } = this.state;
+    navigation.setParams({
+      title: `card ${cardIndex + 1} of ${cards.length}`,
+    });
   }
 
   render() {
-    const { cardIndex, cardSide } = this.state;
+    const {
+      cardIndex,
+      cardSide,
+      correctCards,
+      incorrectCards,
+    } = this.state;
     const { busy, cards } = this.props;
     const card = cards[cardIndex];
+
+    if (cardIndex >= cards.length) {
+      return (
+        <QuizResult
+          numOfCorrectCards={correctCards.size}
+          numOfIncorrectCards={incorrectCards.size}
+          backToDeck={this.backToDeck}
+          restartQuiz={this.restartQuiz}
+        />
+      );
+    }
+
     return (
       <View style={commonStyles.screenContainer}>
         <View style={commonStyles.blockTop}>

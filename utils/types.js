@@ -79,31 +79,6 @@ export type CardsMap = Map<string, CardMap>;
 /* endof Cards - - - - */
 
 
-/* Quiz - - - - */
-export type Quiz = {
-  cardIndex: number,
-  correctCards: Array<string>,
-  deckId: string,
-  incorrectCards: Array<string>,
-};
-export type IQuizMap = {
-  cardIndex: number,
-  correctCards: List<string>,
-  deskId: string,
-  incorrectCards: List<string>,
-};
-export type QuizKey =
-  | 'cardIndex'
-  | 'correctCards'
-  | 'deckId'
-  | 'incorrectCards'
-export type QuizValue =
-  | number
-  | string
-  | List<string>
-export type QuizMap = Map<QuizKey, QuizValue>;
-/* endof Quiz - - - - */
-
 export type StateKey =
   | 'cards'
   | 'decks'
