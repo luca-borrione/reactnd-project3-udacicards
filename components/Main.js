@@ -8,12 +8,14 @@ import { purple } from '../utils/colors';
 type Props = {
   loadInitialData: () => void,
   loading: boolean,
+  setNotification: () => void,
 };
 
 class Main extends Component<Props> {
-  componentDidMount(): void {
-    const { loadInitialData } = this.props;
-    loadInitialData();
+  async componentDidMount(): Promise<void> {
+    const { loadInitialData, setNotification } = this.props;
+    await setNotification();
+    await loadInitialData();
   }
 
   render(): Element<any> {

@@ -1,6 +1,12 @@
 // @flow
 import { connect } from 'react-redux';
 import { type List } from 'immutable';
+import setNotification, {
+  type SetNotificationAction,
+} from '../actions/thunk/setNotification';
+import unsetNotification, {
+  type UnsetNotificationAction,
+} from '../actions/thunk/unsetNotification';
 import {
   getCorrectCards,
   getIncorrectCards,
@@ -12,6 +18,7 @@ import QuizResult from '../components/QuizResult';
 import {
   type Dispatch,
   type StateMap,
+  type Thunk,
 } from '../utils/types';
 
 const mapStateToProps = (state: StateMap): {
@@ -28,12 +35,14 @@ const mapStateToProps = (state: StateMap): {
 
 type Action =
   | ResetQuizAction
+  | Thunk<SetNotificationAction>
+  | Thunk<UnsetNotificationAction>
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    restartQuiz: (): void => {
-      dispatch(resetQuiz());
-    },
+    restartQuiz: (): void => dispatch(resetQuiz()),
+    setNotification: (): Promise<void> => dispatch(setNotification()),
+    unsetNotification: (): Promise<void> => dispatch(unsetNotification()),
   };
 }
 

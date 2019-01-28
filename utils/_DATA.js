@@ -76,7 +76,15 @@ export const _saveCard = async (unformattedCard: UnformattedCard): Promise<Card>
   return card;
 };
 
-export const _getNotificationDate = (): Promise<Date> => (
+export const _getNotificationTimestampAsync = (): Promise<number | void> => (
   AsyncStorage.getItem(NOTIFICATION_KEY)
     .then(JSON.parse)
+);
+
+export const _saveNotificationTimestampAsync = (timestamp: number): Promise<void> => (
+  AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(timestamp))
+);
+
+export const _removeNotificationTimestampAsync = (): Promise<void> => (
+  AsyncStorage.removeItem(NOTIFICATION_KEY)
 );

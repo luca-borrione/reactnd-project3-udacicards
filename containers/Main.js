@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Main from '../components/Main';
 import { INIT_STATE } from '../states/status';
 import handleInitialData, { type InitialDataAction } from '../actions/thunk/handleInitialData';
+import setNotification, { type SetNotificationAction } from '../actions/thunk/setNotification';
 import { getStatus } from '../selectors/status';
 import {
   type Dispatch,
@@ -12,6 +13,7 @@ import {
 
 type Action =
   | Thunk<InitialDataAction>
+  | Thunk<SetNotificationAction>
 
 const mapStateToProps = (state: StateMap): {
   loading: boolean,
@@ -20,7 +22,8 @@ const mapStateToProps = (state: StateMap): {
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  loadInitialData: (): void => dispatch(handleInitialData()),
+  loadInitialData: (): Promise<void> => dispatch(handleInitialData()),
+  setNotification: (): Promise<void> => dispatch(setNotification()),
 });
 
 export default connect(

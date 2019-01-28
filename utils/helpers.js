@@ -1,4 +1,5 @@
 // @flow
+import { Notifications, Permissions } from 'expo';
 import {
   isImmutable,
   List, type List as TList,
@@ -46,3 +47,65 @@ export function expectList(list: any): TList<any> {
   }
   throw new TypeError(`unexpected type: ${typeof list} - expected list`);
 }
+
+type LocalNotification = {
+  [key: string]: string | {
+    [key: string]: string | boolean
+  },
+};
+
+export const getLocalNotification = (): LocalNotification => ({
+  title: "It's Quiz time!",
+  body: "👋 don't forget to practice!",
+  ios: {
+    sound: true,
+  },
+  android: {
+    sound: true,
+    priority: 'high',
+    sticky: false,
+    vibrate: true,
+  },
+});
+
+export function getNotificationTimestamp() {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  date.setHours(20);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  return date.getTime();
+  /* DEBUG PURPOSES
+  const debugDate = new Date();
+  debugDate.setMinutes(debugDate.getMinutes() + 1);
+  return debugDate.getTime();
+  */
+}
+
+type SchedulingOptions = {
+  [key: string]: string | number,
+};
+
+export const getSchedulingOptions = (timestamp: number): SchedulingOptions => ({
+  time: timestamp,
+  repeat: 'day',
+});
+
+export async function scheduleLocalNotificationAsync(): Promise<number | void> {
+  const { status }: { status: string } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+  if (status !== 'granted') {
+    return undefined;
+  }
+
+  await Notifications.cancelAllScheduledNotificationsAsync();
+  const localNotification: LocalNotification = getLocalNotification();
+  const timestamp: number = getNotificationTimestamp();
+  const schedulingOptions: SchedulingOptions = getSchedulingOptions(timestamp);
+  await Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
+  return timestamp;
+}
+
+export const cancelAllScheduledNotificationsAsync = () => (
+  Notifications.cancelAllScheduledNotificationsAsync()
+);

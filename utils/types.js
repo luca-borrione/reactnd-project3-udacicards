@@ -2,6 +2,7 @@
 import { type Map, type List } from 'immutable';
 import { type CardsAction } from '../actions/cards';
 import { type DecksAction } from '../actions/decks';
+import { type NotificationAction } from '../actions/notification';
 import { type QuizAction } from '../actions/quiz';
 import { type StatusAction } from '../actions/status';
 
@@ -108,10 +109,12 @@ export type QuizMap = Map<QuizKey, QuizValue>;
 export type StateKey =
   | 'cards'
   | 'decks'
+  | 'notification'
   | 'quiz'
   | 'status'
 export type StateValue =
   | string
+  | number
   | Map<string, mixed>
   // | CardsMap
   // | DecksMap;
@@ -130,6 +133,7 @@ export type Action<T, P = void> = {
 export type StoreAction =
   | CardsAction
   | DecksAction
+  | NotificationAction
   | QuizAction
   | StatusAction
 

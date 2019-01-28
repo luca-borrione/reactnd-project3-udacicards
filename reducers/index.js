@@ -3,6 +3,7 @@ import { type Reducer } from 'redux';
 import { combineReducers } from 'redux-immutable';
 import cards from './cards';
 import decks from './decks';
+import notification from './notification';
 import quiz from './quiz';
 import status from './status';
 import {
@@ -13,6 +14,7 @@ import {
 const reducers = {
   cards,
   decks,
+  notification,
   quiz,
   status,
 };

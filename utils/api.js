@@ -5,7 +5,9 @@ import {
   _saveCard,
   _saveDeck,
   _dropDeck,
-  _getNotificationDate,
+  _getNotificationTimestampAsync,
+  _saveNotificationTimestampAsync,
+  _removeNotificationTimestampAsync,
 } from './_DATA';
 import {
   type Deck,
@@ -42,7 +44,14 @@ export const saveCard = (deckId: string, question: string, answer: string): Prom
   })
 );
 
-export async function setDeviceNotification() {
-  const notificationDate: Date = await _getNotificationDate();
-  console.log('>> notificationDate', notificationDate);
-}
+export const getNotificationTimestampAsync = (): Promise<number | void> => (
+  _getNotificationTimestampAsync()
+);
+
+export const saveNotificationTimestampAsync = (timestamp: number): Promise<void> => (
+  _saveNotificationTimestampAsync(timestamp)
+);
+
+export const removeNotificationTimestampAsync = (): Promise<void> => (
+  _removeNotificationTimestampAsync()
+);
