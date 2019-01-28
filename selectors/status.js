@@ -1,6 +1,6 @@
 // @flow
-import { type StateMap } from '../utils/types';
 import { expectString } from '../utils/helpers';
+import { type StateMap } from '../utils/types';
 
 export const getStatus = (state: StateMap): string => (
   expectString(state.get('status'))

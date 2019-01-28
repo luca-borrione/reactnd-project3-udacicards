@@ -5,6 +5,9 @@ import { BUSY_STATE } from '../states/status';
 import { getStatus } from '../selectors/status';
 import toJS from '../hoc/to-js';
 import unsetDeck, { type UnsetDeckAction } from '../actions/thunk/unsetDeck';
+import {
+  initQuiz, type InitQuizAction,
+} from '../actions/quiz';
 import { getDeckById } from '../selectors/decks';
 import DeckView from '../components/DeckView';
 import {
@@ -31,12 +34,31 @@ const mapStateToProps = (state: StateMap, { navigation }: Props): {
 
 type Action =
   | Thunk<UnsetDeckAction>
+  | InitQuizAction
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  unsetDeck: (deckId: string): Promise<void> => (
-    dispatch(unsetDeck(deckId))
-  ),
-});
+function mapDispatchToProps(dispatch: Dispatch<Action>, { navigation }) {
+  const { deckId } = navigation.state.params;
+  const isNavigating = (): boolean => !navigation.isFocused();
+  return {
+    addCard: () => {
+      if (!isNavigating()) {
+        navigation.navigate('AddCard', { deckId });
+      }
+    },
+    deleteDeck: async (): Promise<void> => {
+      if (!isNavigating()) {
+        await dispatch(unsetDeck(deckId));
+        navigation.navigate('DecksList');
+      }
+    },
+    startQuiz: (): void => {
+      if (!isNavigating()) {
+        dispatch(initQuiz(deckId));
+        navigation.navigate('Quiz', { deckId });
+      }
+    },
+  };
+}
 
 export default connect(
   mapStateToProps,

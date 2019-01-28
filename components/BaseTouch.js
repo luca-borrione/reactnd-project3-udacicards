@@ -60,7 +60,7 @@ const BaseTouch = ({
       button ? styles.baseTouchButton : {},
       button ? { backgroundColor, borderColor } : {},
       disabled ? styles.baseTouchDisabled : {},
-      // inactive ? styles.baseTouchInactive : {}, // KEEP THIS LINE FOR DEBUGGING
+      inactive ? styles.baseTouchInactive : {}, // DEBUG PURPOSES
     ]}
     onPress={onPress}
     disabled={disabled || inactive}

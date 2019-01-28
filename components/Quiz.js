@@ -6,28 +6,17 @@ import {
   type NavigationScreenProp,
 } from 'react-navigation';
 import CardFlip from 'react-native-card-flip';
-import QuizCard from './QuizCard';
-import QuizResult from './QuizResult';
-import { type Card } from '../utils/types';
-
-const DEFAULT_STATE = {
-  index: 0,
-  correctCards: new Set(),
-  incorrectCards: new Set(),
-};
+import QuizCard from '../containers/QuizCard';
+import QuizResult from '../containers/QuizResult';
 
 type Props = {
-  cards: Array<Card>,
+  cardNumber: number,
+  cardsLength: number,
   navigation: NavigationScreenProp<NavigationState>,
+  showResult: boolean,
 };
 
-type State = {
-  index: number,
-  correctCards: Set<string>,
-  incorrectCards: Set<string>,
-};
-
-class Quiz extends Component<Props, State> {
+class Quiz extends Component<Props> {
   static navigationOptions = ({
     navigation,
   }: {
@@ -41,108 +30,44 @@ class Quiz extends Component<Props, State> {
 
   cardFlip: typeof CardFlip = null;
 
-  state = DEFAULT_STATE;
-
   componentDidMount(): void {
     this.updateTitle();
   }
 
-  getCurrentCard(): Card {
-    const { index } = this.state;
-    const { cards } = this.props;
-    const card: Card | void = cards[index];
-    if (card) {
-      return card;
-    }
-    throw new Error('cannot retrieve current card');
+  componentDidUpdate(): void {
+    this.updateTitle();
   }
-
-  increaseIndex = (callback?: () => void): void => {
-    this.setState(prevState => ({
-      index: prevState.index + 1,
-    }), callback);
-  }
-
-  addCorrectCard = (callback?: () => void): void => {
-    const card: Card = this.getCurrentCard();
-    this.setState(prevState => ({
-      correctCards: new Set([...prevState.correctCards, card.id]),
-    }), callback);
-  };
-
-  addIncorrectCard = (callback?: () => void): void => {
-    const card: Card = this.getCurrentCard();
-    this.setState(prevState => ({
-      incorrectCards: new Set([...prevState.incorrectCards, card.id]),
-    }), callback);
-  };
 
   backToDeck = (): void => {
     const { navigation } = this.props;
     navigation.dispatch(NavigationActions.back());
   }
 
-  restartQuiz = (): void => {
-    this.setState(DEFAULT_STATE, this.updateTitle);
-  }
+  updateTitle = () => {
+    const {
+      cardNumber,
+      cardsLength,
+      navigation,
+      showResult,
+    } = this.props;
 
-  next = (): void => {
-    if (this.nextCardExists()) {
-      this.goToNextCard();
-    } else {
-      this.goToResult();
+    const title: string = showResult
+      ? 'Result'
+      : `Card ${cardNumber} of ${cardsLength}`;
+
+    if (title !== navigation.state.params.title) {
+      navigation.setParams({ title });
     }
-  }
-
-  nextCardExists(): boolean {
-    const { index } = this.state;
-    const { cards } = this.props;
-    return index < cards.length - 1;
-  }
-
-  goToNextCard(): void {
-    this.increaseIndex(this.updateTitle);
-  }
-
-  goToResult() {
-    const { navigation } = this.props;
-    navigation.setParams({ title: 'Result' });
-    this.increaseIndex();
-  }
-
-  updateTitle() {
-    const { cards, navigation } = this.props;
-    const { index } = this.state;
-    navigation.setParams({
-      title: `card ${index + 1} of ${cards.length}`,
-    });
-  }
+  };
 
   render() {
-    const { index } = this.state;
-    const { cards } = this.props;
+    const { showResult } = this.props;
 
-    if (index >= cards.length) {
-      const { correctCards, incorrectCards } = this.state;
-      return (
-        <QuizResult
-          numOfCorrectCards={correctCards.size}
-          numOfIncorrectCards={incorrectCards.size}
-          backToDeck={this.backToDeck}
-          restartQuiz={this.restartQuiz}
-        />
-      );
+    if (showResult) {
+      return <QuizResult backToDeck={this.backToDeck} />;
     }
 
-    const card: Card = this.getCurrentCard();
-    return (
-      <QuizCard
-        card={card}
-        addCorrectCard={this.addCorrectCard}
-        addIncorrectCard={this.addIncorrectCard}
-        next={this.next}
-      />
-    );
+    return <QuizCard />;
   }
 }
 

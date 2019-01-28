@@ -1,16 +1,16 @@
 // @flow
 import { type List } from 'immutable';
 import {
+  expectMap,
+  expectNumber,
+  expectString,
+} from '../utils/helpers';
+import {
   type CardMap,
   type CardsMap,
   type ICardMap,
   type StateMap,
 } from '../utils/types';
-import {
-  expectMap,
-  expectNumber,
-  expectString,
-} from '../utils/helpers';
 
 export const card = (cardMap: CardMap): ICardMap => ({
   answer: expectString(cardMap.get('answer')),

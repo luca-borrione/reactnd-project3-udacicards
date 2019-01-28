@@ -5,6 +5,7 @@ import {
   _saveCard,
   _saveDeck,
   _dropDeck,
+  _getNotificationDate,
 } from './_DATA';
 import {
   type Deck,
@@ -40,3 +41,8 @@ export const saveCard = (deckId: string, question: string, answer: string): Prom
     question,
   })
 );
+
+export async function setDeviceNotification() {
+  const notificationDate: Date = await _getNotificationDate();
+  console.log('>> notificationDate', notificationDate);
+}

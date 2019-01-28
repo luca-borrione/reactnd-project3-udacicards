@@ -1,17 +1,17 @@
 // @flow
 import { type List } from 'immutable';
 import {
-  type DeckMap,
-  type DecksMap,
-  type IDeckMap,
-  type StateMap,
-} from '../utils/types';
-import {
   expectList,
   expectMap,
   expectNumber,
   expectString,
 } from '../utils/helpers';
+import {
+  type DeckMap,
+  type DecksMap,
+  type IDeckMap,
+  type StateMap,
+} from '../utils/types';
 
 export const deck = (deckMap: DeckMap): IDeckMap => ({
   cards: expectList(deckMap.get('cards')),

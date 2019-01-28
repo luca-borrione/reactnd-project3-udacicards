@@ -10,8 +10,9 @@ import {
   type UnformattedCard,
 } from './types';
 
-export const CARDS_STORAGE_KEY = 'UdaciCards:cards';
-export const DECKS_STORAGE_KEY = 'UdaciCards:decks';
+const CARDS_STORAGE_KEY = 'UdaciCards:cards';
+const DECKS_STORAGE_KEY = 'UdaciCards:decks';
+const NOTIFICATION_KEY = 'UdaciCards:notification';
 
 export function _getCards(): Promise<Cards> {
   return AsyncStorage.getItem(CARDS_STORAGE_KEY)
@@ -74,3 +75,8 @@ export const _saveCard = async (unformattedCard: UnformattedCard): Promise<Card>
   await AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
   return card;
 };
+
+export const _getNotificationDate = (): Promise<Date> => (
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+    .then(JSON.parse)
+);

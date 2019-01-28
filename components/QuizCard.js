@@ -50,13 +50,12 @@ const styles = StyleSheet.create({
 
 type Props = {
   card: Card,
-  addCorrectCard: (callback?: ()=>void) => void,
-  addIncorrectCard: (callback?: ()=>void) => void,
-  next: () => void,
+  correct: () => void,
+  incorrect: () => void,
+  lastOne: boolean,
 };
 
 type State = {
-  cardId: string,
   side: number,
   status: Symbol,
 };
@@ -70,29 +69,9 @@ class QuizCard extends Component<Props, State> {
   cardFlip: typeof CardFlip = null;
 
   state = {
-    cardId: '',
     side: QUESTION_SIDE,
     status: READY_STATE,
   };
-
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    if (nextProps.card.id !== nextState.cardId) {
-      if (this.cardFlip.state.side !== QUESTION_SIDE) {
-        // A new card needs to be displayed and we are showing the back side
-        this.showQuestion();
-        setTimeout(this.setCardId, 250, nextProps.card.id);
-      } else {
-        const busy = nextState.status === BUSY_STATE;
-        // Busy processing the showQuestion instruction above
-        if (!busy) {
-          // We should never be here, just as a safaety measure
-          this.setCardId(nextProps.card.id);
-        }
-      }
-      return false;
-    }
-    return true;
-  }
 
   setBusyState = (): void => {
     this.setState({ status: BUSY_STATE });
@@ -100,10 +79,6 @@ class QuizCard extends Component<Props, State> {
 
   setReadyState = (): void => {
     this.setState({ status: READY_STATE });
-  }
-
-  setCardId = (cardId: string): void => {
-    this.setState({ cardId });
   }
 
   setSide = (side: number): void => {
@@ -123,15 +98,25 @@ class QuizCard extends Component<Props, State> {
   };
 
   onPressCorrect = () => {
-    const { addCorrectCard, next } = this.props;
+    const { correct, lastOne } = this.props;
     this.setBusyState();
-    addCorrectCard(next);
+    if (lastOne) {
+      correct();
+    } else {
+      this.showQuestion();
+      setTimeout(correct, 250);
+    }
   };
 
   onPressIncorrect = () => {
-    const { addIncorrectCard, next } = this.props;
+    const { incorrect, lastOne } = this.props;
     this.setBusyState();
-    addIncorrectCard(next);
+    if (lastOne) {
+      incorrect();
+    } else {
+      this.showQuestion();
+      setTimeout(incorrect, 250);
+    }
   };
 
   onCardFlipEnd = () => {

@@ -19,19 +19,19 @@ const styles = StyleSheet.create({
 type Props = {
   backToDeck: () => void,
   restartQuiz: () => void,
-  numOfCorrectCards: number,
-  numOfIncorrectCards: number,
+  correctNumber: number,
+  incorrectNumber: number,
 };
 
 const QuizResult = ({
   backToDeck,
-  numOfCorrectCards,
-  numOfIncorrectCards,
+  correctNumber,
+  incorrectNumber,
   restartQuiz,
 }: Props): Element<typeof View> => {
-  const totNumOfCards: number = numOfCorrectCards + numOfIncorrectCards;
-  const score: number = Math.round((numOfCorrectCards / totNumOfCards) * 100);
-  const resultText: string = `${numOfCorrectCards} correct ${numOfCorrectCards === 1 ? 'answer' : 'answers'} out of ${totNumOfCards}, your score is:`;
+  const totNumOfCards: number = correctNumber + incorrectNumber;
+  const score: number = Math.round((correctNumber / totNumOfCards) * 100);
+  const resultText: string = `${correctNumber} correct ${incorrectNumber === 1 ? 'answer' : 'answers'} out of ${totNumOfCards}, your score is:`;
   return (
     <View style={commonStyles.screenContainer}>
       <View style={commonStyles.blockTop}>
