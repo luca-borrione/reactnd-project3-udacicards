@@ -43,5 +43,31 @@ Lintint utility for JavaScript and JSX
 * start the flow server with `npm run flow`
 
 
+## Screenshots
 
+**Decks' List**
+![screen shot 2019-01-28 at 23 43 23](https://user-images.githubusercontent.com/23177229/51882895-735c7e80-2378-11e9-94cc-3a3cea913c00.png)
 
+**New Deck**
+![screen shot 2019-01-28 at 23 33 00](https://user-images.githubusercontent.com/23177229/51882891-72c3e800-2378-11e9-9379-bc2de8419525.png)
+
+**Deck Detail**
+![screen shot 2019-01-29 at 02 00 18](https://user-images.githubusercontent.com/23177229/51882899-73f51500-2378-11e9-9044-409c603b01ef.png)
+
+**New Card**
+![screen shot 2019-01-28 at 23 35 24](https://user-images.githubusercontent.com/23177229/51882893-735c7e80-2378-11e9-961b-71be1f016b03.png)
+
+**Quiz Card Question**
+![screen shot 2019-01-28 at 23 58 42](https://user-images.githubusercontent.com/23177229/51882896-73f51500-2378-11e9-908e-1c6f79b51dde.png)
+
+**Quiz Card Answer**
+![screen shot 2019-01-28 at 23 58 47](https://user-images.githubusercontent.com/23177229/51882897-73f51500-2378-11e9-89fd-bc156ee38a66.png)
+
+**Quiz Result**
+![screen shot 2019-01-29 at 00 03 16](https://user-images.githubusercontent.com/23177229/51882898-73f51500-2378-11e9-956a-1a3088ad323b.png)
+
+**Notification**
+![screen shot 2019-01-28 at 22 11 02](https://user-images.githubusercontent.com/23177229/51882890-72c3e800-2378-11e9-9f88-cb34957fd810.png)
+
+## Tests
+This mobile app has been developed using the xcode simulator (iPhone XR) and the android studio simulator (Pixel 2 XL) and it has been tested on an actual iPhone 5S device
