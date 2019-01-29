@@ -8,11 +8,13 @@ import {
 type AddDeck = 'decks/ADD_DECK';
 type AddCardToDeck = 'decks/ADD_CARD_TO_DECK';
 type InitDecks = 'decks/INIT_DECKS';
+type RemoveCardFromDeck = 'decks/REMOVE_CARD_FROM_DECK';
 type RemoveDeck = 'decks/REMOVE_DECK';
 
 export const ADD_DECK: AddDeck = 'decks/ADD_DECK';
 export const ADD_CARD_TO_DECK: AddCardToDeck = 'decks/ADD_CARD_TO_DECK';
 export const INIT_DECKS: InitDecks = 'decks/INIT_DECKS';
+export const REMOVE_CARD_FROM_DECK: RemoveCardFromDeck = 'decks/REMOVE_CARD_FROM_DECK';
 export const REMOVE_DECK: RemoveDeck = 'decks/REMOVE_DECK';
 
 export type AddDeckPayload = {
@@ -25,6 +27,10 @@ export type AddCardToDeckPayload = {
 export type InitDecksPayload = {
   decks: Decks,
 };
+export type RemoveCardFromDeckPayload = {
+  cardId: string,
+  deckId: string,
+};
 export type RemoveDeckPayload = {
   deckId: string,
 };
@@ -32,12 +38,14 @@ export type RemoveDeckPayload = {
 export type AddDeckAction = Action<AddDeck, AddDeckPayload>;
 export type AddCardToDeckAction = Action<AddCardToDeck, AddCardToDeckPayload>;
 export type InitDecksAction = Action<InitDecks, InitDecksPayload>;
+export type RemoveCardFromDeckAction = Action<RemoveCardFromDeck, RemoveCardFromDeckPayload>;
 export type RemoveDeckAction = Action<RemoveDeck, RemoveDeckPayload>;
 
 export type DecksAction =
   | AddDeckAction
   | AddCardToDeckAction
   | InitDecksAction
+  | RemoveCardFromDeckAction
   | RemoveDeckAction
 
 export const addDeck = (
@@ -66,6 +74,17 @@ export const initDecks = (
   type: INIT_DECKS,
   payload: {
     decks,
+  },
+});
+
+export const removeCardFromDeck = (
+  cardId: string,
+  deckId: string,
+): RemoveCardFromDeckAction => ({
+  type: REMOVE_CARD_FROM_DECK,
+  payload: {
+    cardId,
+    deckId,
   },
 });
 

@@ -3,6 +3,7 @@ import {
   _getCards,
   _getDecks,
   _saveCard,
+  _dropCard,
   _saveDeck,
   _dropDeck,
   _getNotificationTimestampAsync,
@@ -42,6 +43,10 @@ export const saveCard = (deckId: string, question: string, answer: string): Prom
     deckId,
     question,
   })
+);
+
+export const dropCard = (cardId: string): Promise<void> => (
+  _dropCard(cardId)
 );
 
 export const getNotificationTimestampAsync = (): Promise<number | void> => (

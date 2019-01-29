@@ -5,6 +5,7 @@ import {
   type CardsAction,
   ADD_CARD, type AddCardPayload,
   INIT_CARDS, type InitCardsPayload,
+  REMOVE_CARD, type RemoveCardPayload,
 } from '../actions/cards';
 import {
   type CardMap,
@@ -31,6 +32,16 @@ const reducer = (state: CardsMap = new Map(), action: CardsAction) => {
         const cardsMap: CardsMap = ((fromJS(cards): any): CardsMap);
         // $FlowSuppressError: The following line is borked because of https://github.com/facebook/flow/issues/7309
         return state.merge(cardsMap);
+      }
+      throw new Error('unexpected empty payload');
+    }
+
+    case REMOVE_CARD: {
+      const payload: RemoveCardPayload | void = action.payload;
+      if (payload) {
+        const { cardId } = payload;
+        // $FlowSuppressError: The following line is borked because of https://github.com/facebook/flow/issues/7309
+        return state.delete(cardId);
       }
       throw new Error('unexpected empty payload');
     }

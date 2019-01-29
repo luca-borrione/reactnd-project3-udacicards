@@ -10,6 +10,7 @@ import {
   ADD_DECK, type AddDeckPayload,
   ADD_CARD_TO_DECK, type AddCardToDeckPayload,
   INIT_DECKS, type InitDecksPayload,
+  REMOVE_CARD_FROM_DECK, type RemoveCardFromDeckPayload,
   REMOVE_DECK, type RemoveDeckPayload,
 } from '../actions/decks';
 import {
@@ -50,6 +51,19 @@ const reducer = (state: DecksMap = new Map(), action: DecksAction) => {
         const decksMap: DecksMap = ((fromJS(decks): any): DecksMap);
         // $FlowSuppressError: The following line is borked because of https://github.com/facebook/flow/issues/7309
         return state.merge(decksMap);
+      }
+      throw new Error('unexpected empty payload');
+    }
+
+    case REMOVE_CARD_FROM_DECK: {
+      const payload: RemoveCardFromDeckPayload | void = action.payload;
+      if (payload) {
+        const { cardId, deckId } = payload;
+        // $FlowSuppressError: The following line is borked because of https://github.com/facebook/flow/issues/7309
+        return state.updateIn(
+          [deckId, 'cards'],
+          (list: List<string>) => list.delete(list.indexOf(cardId)),
+        );
       }
       throw new Error('unexpected empty payload');
     }

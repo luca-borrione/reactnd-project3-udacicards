@@ -17,6 +17,7 @@ import {
   white,
   green,
   red,
+  lightBordeaux,
 } from '../utils/colors';
 
 const styles = StyleSheet.create({
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
 type Props = {
   card: Card,
   correct: () => void,
+  deleteCard: () => Promise<void>,
   incorrect: () => void,
   lastOne: boolean,
 };
@@ -138,7 +140,7 @@ class QuizCard extends Component<Props, State> {
 
   render(): Element<typeof View> {
     const { side, status } = this.state;
-    const { card } = this.props;
+    const { card, deleteCard } = this.props;
     const busy = status === BUSY_STATE;
 
     return (
@@ -176,6 +178,12 @@ class QuizCard extends Component<Props, State> {
                 button
                 text="Show Answer"
                 onPress={this.showAnswer}
+                inactive={busy}
+              />
+              <BaseTouch
+                text="Delete Card"
+                onPress={deleteCard}
+                color={lightBordeaux}
                 inactive={busy}
               />
             </View>

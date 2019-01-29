@@ -76,6 +76,22 @@ export const _saveCard = async (unformattedCard: UnformattedCard): Promise<Card>
   return card;
 };
 
+export const _dropCard = async (cardId: string): Promise<void> => {
+  // Removing tbe cardId from the cards item
+  const cardItem = await AsyncStorage.getItem(CARDS_STORAGE_KEY);
+  const cards: { [key: string]: Card | null } = JSON.parse(cardItem);
+  const { deckId } = ((cards[cardId]: any): Card);
+  cards[cardId] = null;
+  delete cards[cardId];
+  await AsyncStorage.setItem(CARDS_STORAGE_KEY, JSON.stringify(cards));
+
+  // Removing the
+  const deckItem = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+  const decks: Decks = JSON.parse(deckItem);
+  decks[deckId].cards = decks[deckId].cards.filter(id => id !== cardId);
+  await AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(decks));
+};
+
 export const _getNotificationTimestampAsync = (): Promise<number | void> => (
   AsyncStorage.getItem(NOTIFICATION_KEY)
     .then(JSON.parse)
