@@ -6,6 +6,10 @@ import commonStyles from '../utils/styles';
 import { red } from '../utils/colors';
 
 const styles = StyleSheet.create({
+  resultTopBlock: {
+    ...commonStyles.blockTop,
+    justifyContent: 'center',
+  },
   resultText: {
     ...commonStyles.h3,
     textAlign: 'center',
@@ -46,7 +50,7 @@ class QuizResult extends Component<Props> {
 
     return (
       <View style={commonStyles.screenContainer}>
-        <View style={commonStyles.blockTop}>
+        <View style={styles.resultTopBlock}>
           <Text style={styles.resultText}>{resultText}</Text>
           <Text style={styles.score}>{score} %</Text>
         </View>

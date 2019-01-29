@@ -12,6 +12,12 @@ import CardFlip from 'react-native-card-flip';
 import BaseTouch from './BaseTouch';
 import commonStyles from '../utils/styles';
 import { type Card } from '../utils/types';
+import {
+  purple,
+  white,
+  green,
+  red,
+} from '../utils/colors';
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -21,8 +27,8 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#FE474C',
     borderRadius: Platform.OS === 'ios' ? 10 : 2,
+    borderWidth: 1,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
       width: 5,
@@ -33,18 +39,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardQuestion: {
-    backgroundColor: '#FE474C',
+    backgroundColor: purple,
+    borderColor: white,
   },
   cardAnswer: {
-    backgroundColor: '#FEB12C',
+    backgroundColor: white,
+    borderColor: purple,
   },
   cardLabel: {
     fontSize: 24,
-    color: 'white',
     textAlign: 'center',
     flexWrap: 'wrap',
     width: '90%',
     fontFamily: 'System',
+  },
+  cardQuestionLabel: {
+    color: white,
+  },
+  cardAnswerLabel: {
+    color: purple,
   },
 });
 
@@ -142,7 +155,7 @@ class QuizCard extends Component<Props, State> {
               onPress={this.showAnswer}
               disabled={busy}
             >
-              <Text style={styles.cardLabel} numberOfLines={5}>
+              <Text style={[styles.cardLabel, styles.cardQuestionLabel]} numberOfLines={5}>
                 {card.question}
               </Text>
             </TouchableOpacity>
@@ -152,7 +165,7 @@ class QuizCard extends Component<Props, State> {
               onPress={this.showQuestion}
               disabled={busy}
             >
-              <Text style={styles.cardLabel}>{card.answer}</Text>
+              <Text style={[styles.cardLabel, styles.cardAnswerLabel]}>{card.answer}</Text>
             </TouchableOpacity>
           </CardFlip>
         </View>
@@ -172,12 +185,18 @@ class QuizCard extends Component<Props, State> {
               <BaseTouch
                 button
                 text="Correct"
+                backgroundColor={green}
+                color={white}
+                borderColor={white}
                 onPress={this.onPressCorrect}
                 inactive={busy}
               />
               <BaseTouch
                 button
                 text="Incorrect"
+                backgroundColor={red}
+                color={white}
+                borderColor={white}
                 onPress={this.onPressIncorrect}
                 inactive={busy}
               />
