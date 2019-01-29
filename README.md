@@ -7,16 +7,16 @@ A flashcard is a card bearing information, used in classroom drills or in privat
 This mobile app meets the [project specifications](https://review.udacity.com/#!/rubrics/1021/view) required by Udacity and in particular:
 - the mobile starts with the decks list view, containing a tab to navigate to the new deck screen
 - tapping over a deck the user can enter the deck view, contanings buttons to:
--- add a new card to the deck
--- start the quiz
--- delete the deck
+  - add a new card to the deck
+  - start the quiz
+  - delete the deck
 - the quiz shows the card details one at a time
 - the card view starts showing the question and buttons to:
--- show the answer
--- delete the card
+  - show the answer
+  - delete the card
 - when the answer is shown, the app reveals two new buttons to mark the answer as:
--- correct
--- incorrect
+  - correct
+  - incorrect
 - once all the questions have been answered a result screen contaning the score achieved by the user is shown
 - the app contains a feature to show a notification every day at 8:00pm to remind the user to go through at least one quiz.
 
