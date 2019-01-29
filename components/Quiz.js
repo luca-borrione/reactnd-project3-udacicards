@@ -35,7 +35,12 @@ class Quiz extends Component<Props> {
   }
 
   componentDidUpdate(): void {
+    const { cardsLength } = this.props;
     this.updateTitle();
+
+    if (cardsLength === 0) {
+      this.backToDeck();
+    }
   }
 
   backToDeck = (): void => {
@@ -51,9 +56,12 @@ class Quiz extends Component<Props> {
       showResult,
     } = this.props;
 
-    const title: string = showResult
-      ? 'Result'
-      : `Card ${cardNumber} of ${cardsLength}`;
+    let title: string = '';
+    if (cardsLength > 0) {
+      title = showResult
+        ? 'Result'
+        : `Card ${cardNumber} of ${cardsLength}`;
+    }
 
     if (title !== navigation.state.params.title) {
       navigation.setParams({ title });
@@ -61,9 +69,12 @@ class Quiz extends Component<Props> {
   };
 
   render() {
-    const { showResult } = this.props;
+    const { cardsLength, showResult } = this.props;
 
     if (showResult) {
+      if (cardsLength === 0) { // deleted the last card
+        return null;
+      }
       return <QuizResult backToDeck={this.backToDeck} />;
     }
 

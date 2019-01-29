@@ -69,12 +69,12 @@ class DeckView extends Component<Props> {
       return null;
     }
 
-    const numOfCards: number = deck.cards.length;
+    const cardsLength: number = deck.cards.length;
     return (
       <View style={styles.deckView}>
         <View style={styles.block1}>
           <Text style={commonStyles.h1}>{deck.title}</Text>
-          <Text style={[commonStyles.h3, commonStyles.secondaryText]}>{numOfCards} cards</Text>
+          <Text style={[commonStyles.h3, commonStyles.secondaryText]}>{cardsLength} cards</Text>
         </View>
         <View style={styles.block2}>
           <BaseTouch
@@ -87,7 +87,7 @@ class DeckView extends Component<Props> {
             button
             text="Start Quiz"
             onPress={startQuiz}
-            disabled={numOfCards === 0}
+            disabled={cardsLength === 0}
             inactive={busy}
             backgroundColor={purple}
             color={white}
